@@ -9,6 +9,7 @@ using Amazon.Lambda.TestUtilities;
 using Amazon.Lambda.APIGatewayEvents;
 
 using SoccerScoresApi;
+using SoccerScoresApi.Extension;
 
 namespace SoccerScoresApi.Tests
 {
@@ -19,16 +20,12 @@ namespace SoccerScoresApi.Tests
         }
 
         [Fact]
-        public void TestFunctionHandlerMethod()
+        public async void TestDBConnection()
         {
-            var function = new Function();
-            var request = new APIGatewayProxyRequest();
-            var context = new TestLambdaContext();
-            
-            var response = function.FunctionHandler(request, context);
-            
-            Assert.Equal(200, response.StatusCode);
-            Assert.StartsWith("{\"message\":\"hello world\",\"location\":", response.Body);
+            DbConnector connector = new DbConnector();
+            bool is_connected = await connector.IsConnected();
+            Assert.True(is_connected);
+            await connector.Disconnect();
         }
     }
 }

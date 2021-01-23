@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
-using MySql;
+using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 
 namespace SoccerScoresApi.Extension
 {
-    class DbConnector
+    public class DbConnector
     {
         protected static string Password = "Blackdog2020$";
         protected static string Username = "Golohas";
