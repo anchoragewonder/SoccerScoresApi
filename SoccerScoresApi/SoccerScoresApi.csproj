@@ -13,11 +13,5 @@
     <PackageReference Include="MySql.Data" Version="8.0.23" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />   
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DbSchema\" />
-    <Folder Include="TableModel\" />
-    <Folder Include="ResponseModel\" />
-  </ItemGroup>
   
 </Project>
