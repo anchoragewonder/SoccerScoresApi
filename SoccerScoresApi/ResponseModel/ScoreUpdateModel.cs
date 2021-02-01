@@ -19,10 +19,26 @@ namespace SoccerScoresApi.ResponseModel
         public string awayTeam { get; set; }
 
         [JsonProperty(PropertyName = "homeScore", Order = 4)]
-        public int homeScore { get; set; }
+        public int? homeScore { get; set; }
 
         [JsonProperty(PropertyName = "awayScore", Order = 5)]
-        public int awayScore { get; set; }
+        public int? awayScore { get; set; }
+
+        public bool isValid
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(date) || string.IsNullOrEmpty(homeTeam) || string.IsNullOrEmpty(awayTeam))
+                {
+                    return false;
+                }
+                if(homeScore == null || awayScore == null)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
 
         public ScoreUpdateModel() { }
 
