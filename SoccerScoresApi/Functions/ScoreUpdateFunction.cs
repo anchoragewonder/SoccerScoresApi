@@ -34,9 +34,24 @@ namespace SoccerScoresApi
                 jsonRequest = JsonConvert.DeserializeObject<ScoreRequest>(apigProxyEvent.Body);
                 if (!jsonRequest.isValid)
                 {
-
+                    // check for valid json from scraper
+                    return new APIGatewayProxyResponse
+                    {
+                        Body = " Improper data for updating scores",
+                        StatusCode = 503,
+                        Headers = new Dictionary<string, string> { { "Content-Type", "application/json" } }
+                    };
                 }
-                var response = await this.GetResponse(jsonRequest);
+                bool response = await this.GetResponse(jsonRequest);
+                if(!response)
+                {
+                    return new APIGatewayProxyResponse
+                    {
+                        Body = " Error Update did not execute properly",
+                        StatusCode = 503,
+                        Headers = new Dictionary<string, string> { { "Content-Type", "application/json" } }
+                    };
+                }
 
                 return new APIGatewayProxyResponse
                 {
@@ -61,11 +76,10 @@ namespace SoccerScoresApi
 
         public async Task<bool> GetResponse(ScoreRequest request)
         {
-            //call db connection
-            //call insert
             TableQuery scores = new TableQuery();
-            //return did it work
-            return true;
+            bool didUpdate = await scores.UpdateScore(request);
+
+            return didUpdate;
         }
 
     }

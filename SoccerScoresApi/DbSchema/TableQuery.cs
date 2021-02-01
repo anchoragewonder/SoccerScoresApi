@@ -20,18 +20,14 @@ namespace SoccerScoresApi.DbSchema
 
         public async Task<bool> UpdateScore(ScoreRequest request)
         {
+            foreach (ScoreUpdateModel s in request.Matches)
+            {
+                bool success = await UpdateScore(s);
 
-            try
-            {
-                foreach(ScoreUpdateModel s in request.Matches)
+                if (!success)
                 {
-                    bool success = await UpdateScore(s);
+                    return false;
                 }
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return false;
             }
             return true;
         }
@@ -39,7 +35,6 @@ namespace SoccerScoresApi.DbSchema
 
         public async Task<bool> UpdateScore(ScoreUpdateModel request)
         {   
-            
             
             DbConnector connection = new DbConnector();
             if (!(await connection.IsConnected()))
@@ -57,14 +52,69 @@ namespace SoccerScoresApi.DbSchema
                 cmd.Parameters.AddWithValue("@home_score", request.homeScore);
                 cmd.Parameters.AddWithValue("@away_score", request.awayScore);
                
-
                 MySqlDataReader reader = cmd.ExecuteReader();
                 return true;
-            }catch(Exception ex)
+            }
+            catch(Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return false;
             }
+        }
+
+        public async Task<List<SoccerTable>> GetTeam(string name)
+        {
+            DbConnector connection = new DbConnector();
+            if (!(await connection.IsConnected()))
+            {
+                throw new Exception();
+            }
+            try
+            {
+                string commandText = $"Select * FROM {Table} WHERE home_team=@name OR away_team=@name";
+                MySqlCommand cmd = new MySqlCommand(commandText, connection.Connection);
+                cmd.Parameters.AddWithValue("@name", name);
+                MySqlDataReader reader = cmd.ExecuteReader();
+
+                List<SoccerTable> teamGamesScore = new List<SoccerTable>();
+                while (reader.Read())
+                {
+                    SoccerTable team = MySqlDataReaderToScore(reader);
+                    teamGamesScore.Add(team);
+                }
+                reader.Close();
+                await connection.Disconnect();
+                return teamGamesScore;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("exeption caught", ex);
+                throw ex;
+            }
+        }
+
+        public Dictionary<string, object> SerializeReader(MySqlDataReader reader)
+        {
+            var results = new Dictionary<string, object>();
+            for (var i = 0; i < reader.FieldCount; i++)
+            {
+                results.Add(reader.GetName(i), reader.GetValue(i));
+            }
+            return results;
+        }
+        private SoccerTable MySqlDataReaderToScore(MySqlDataReader reader)
+        {
+            Dictionary<string, object> dict = SerializeReader(reader);
+
+            int id = Int32.Parse(reader["id"].ToString());
+            string date = reader["date"].ToString();
+            string homeTeam = reader["home_team"].ToString();
+            string awayTeam = reader["away_team"].ToString();
+            int homeScore = Int32.Parse(reader["home_score"].ToString());
+            int awayScore = Int32.Parse(reader["away_score"].ToString());
+
+            return new SoccerTable(id, date, homeTeam, awayTeam, homeScore, awayScore);
+
         }
     }
 }

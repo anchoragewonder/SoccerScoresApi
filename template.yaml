@@ -1,43 +1,68 @@
-AWSTemplateFormatVersion: '2010-09-09'
-Transform: AWS::Serverless-2016-10-31
-Description: >
-    SoccerScoresApi
-    
-    getting scores and fixtures of premier league
+{
+    "AWSTemplateFormatVersion" : "2010-09-09",
+    "Transform" : "AWS::Serverless-2016-10-31",
+    "Description" : "SoccerScoresApi",
 
-# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
-Globals:
-    Function:
-        Runtime: dotnetcore2.1
-        Timeout: 10
+    "Parameters" : {
+        "Stage" : {
+            "Description": "The environment this application is deployed to (should be dev, staging or prod)",
+            "Default": "prod",
+            "Type": "String"
+        }
+    },
 
-Resources:
+    "Globals" : {
+      "Api" : {
+        "Cors" : {
+          "AllowMethods": "'*'",
+          "AllowHeaders": "'*'",
+          "AllowOrigin": "'*'"
+        }
+      }
+    },
 
-    SoccerScoresApiFunction:
-        Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-        Properties:
-            CodeUri: ./artifacts/SoccerScoresApi.zip
-            Handler: SoccerScoresApi::SoccerScoresApi.Function::FunctionHandler
-            Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
-                Variables:
-                    PARAM1: VALUE # https://docs.aws.amazon.com/lambda/latest/dg/lambda-x-ray.html
-            Events:
-                CatchAll:
-                    Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-                    Properties:
-                        Path: /{proxy+}
-                        Method: any 
+    "Resources" : {
 
-Outputs:
+        "ScoreUpdate" : {
+            "Type" : "AWS::Serverless::Function",
+            "Properties": {
+            "Handler": "SoccerScoresApi::SoccerScoresApiFunction.ScoreUpdateFunction::Execute",
+                "Runtime": "dotnetcore2.1",
+                "CodeUri": "publish/SoccerScoresApi",
+                "MemorySize": 2048,
+                "Timeout": 30,
+                "Role": null,
+                "Policies": [ "AWSLambdaBasicExecutionRole" ],
+                "Events": {
+                    "PostResource": {
+                        "Type": "Api",
+                        "Properties": {
+                            "Path": "/update",
+                            "Method": "POST"
+                        }
+                    }
+                }
+            }
+        }
+    }
 
-    SoccerScoresApiURL:
-      Description: "API Gateway endpoint URL for Prod environment for SoccerScoresApi Function"
-      Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/proxy"
+    "Outputs" : {
+        "ApiURL" : {
+            "Description" : "API endpoint URL",
+            "Value" : {
+                "Fn::Join": [
+                    "",
+                    [
+                        "https://",
+                        { "Ref": "ServerlessRestApi"},
+                        ".execute-api.",
+                        { "Ref": "AWS::Region" },
+                        ".amazonaws.com/",
+                        {"Ref": "Stage"}
+                    ]
+                ]
+            }
+        }
+    }
+}  
 
-    SoccerScoresApiFunctionArn:
-      Description: "SoccerScoresApi Lambda Function ARN"
-      Value: !GetAtt SoccerScoresApiFunction.Arn
-
-    SoccerScoresApiFunctionIamRole:
-      Description: "Implicit IAM Role created for SoccerScoresApi function"
-      Value: !GetAtt SoccerScoresApiFunctionRole.Arn

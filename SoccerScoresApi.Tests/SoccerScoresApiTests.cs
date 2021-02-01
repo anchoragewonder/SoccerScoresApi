@@ -27,5 +27,18 @@ namespace SoccerScoresApi.Tests
             Assert.True(is_connected);
             await connector.Disconnect();
         }
-    }
+
+        [Fact]
+        public async Task TestUpdateFunction()
+        {
+            ScoreUpdateFunction func = new ScoreUpdateFunction();
+            APIGatewayProxyRequest request = new APIGatewayProxyRequest();
+            TestLambdaContext testContext = new TestLambdaContext();
+
+            APIGatewayProxyResponse response = await func.Execute(request, testContext);
+            Assert.NotNull(response.Body);
+            Assert.Equal(200, response.StatusCode);
+
+        }
+    }   
 }
