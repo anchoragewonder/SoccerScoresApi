@@ -18,7 +18,7 @@ namespace SoccerScoresApi.ResponseModel
 
         public FixtureUpdateModel() { }
 
-        public FixtureUpdateModel(TableModel.SoccerTable model)
+        public FixtureUpdateModel(TableModel.FixtureTable model)
         {
             this.date = model.date;
             this.homeTeam = model.homeTeam;
