@@ -26,7 +26,6 @@ namespace SoccerScoresApi
 
         public async Task<APIGatewayProxyResponse> Execute(APIGatewayProxyRequest apigProxyEvent, ILambdaContext context)
         {
-
             ScoreRequest jsonRequest;
 
             try
@@ -39,7 +38,7 @@ namespace SoccerScoresApi
                     {
                         Body = " Improper data for updating scores",
                         StatusCode = 503,
-                        Headers = new Dictionary<string, string> { { "Content-Type", "application/json" } }
+                        Headers = new Dictionary<string, string> { { "Content-Type", "application/json" }, { "Access-Control-Allow-Origin", "*" } }
                     };
                 }
                 bool response = await this.GetResponse(jsonRequest);
@@ -49,7 +48,7 @@ namespace SoccerScoresApi
                     {
                         Body = " Error Update did not execute properly",
                         StatusCode = 503,
-                        Headers = new Dictionary<string, string> { { "Content-Type", "application/json" } }
+                        Headers = new Dictionary<string, string> { { "Content-Type", "application/json" }, { "Access-Control-Allow-Origin", "*" } }
                     };
                 }
 
@@ -57,7 +56,7 @@ namespace SoccerScoresApi
                 {
                     Body = "Succesfully updated the score table.",
                     StatusCode = 200,
-                    Headers = new Dictionary<string, string> { { "Content-Type", "application/json" } }
+                    Headers = new Dictionary<string, string> { { "Content-Type", "application/json" }, { "Access-Control-Allow-Origin", "*" } }
                 };
             }
             catch (Exception ex)
@@ -66,14 +65,10 @@ namespace SoccerScoresApi
                 {
                     Body = $"Score table was not updated {ex.Message}.",
                     StatusCode = 403,
-                    Headers = new Dictionary<string, string> { { "Content-Type", "application/json" } }
+                    Headers = new Dictionary<string, string> { { "Content-Type", "application/json" }, { "Access-Control-Allow-Origin", "*" } }
                 };
-
             }
-
         }
-
-
         public async Task<bool> GetResponse(ScoreRequest request)
         {
             TableQuery scores = new TableQuery();
