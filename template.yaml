@@ -43,7 +43,50 @@
                     }
                 }
             }
-        }
+        },
+        "EmptyGet" : {
+            "Type" : "AWS::Serverless::Function",
+            "Properties": {
+            "Handler": "SoccerScoresApi::SoccerScoresApiFunction.MatchesGetFunction::Execute",
+                "Runtime": "dotnetcore2.1",
+                "CodeUri": "publish/SoccerScoresApi",
+                "MemorySize": 2048,
+                "Timeout": 30,
+                "Role": null,
+                "Policies": [ "AWSLambdaBasicExecutionRole" ],
+                "Events": {
+                    "PostResource": {
+                        "Type": "Api",
+                        "Properties": {
+                            "Path": "/teams/",
+                            "Method": "GET"
+                        }
+                    }
+                }
+            }
+        },
+        "MatchesGet" : {
+            "Type" : "AWS::Serverless::Function",
+            "Properties": {
+            "Handler": "SoccerScoresApi::SoccerScoresApiFunction.MatchesGetFunction::Execute",
+                "Runtime": "dotnetcore2.1",
+                "CodeUri": "publish/SoccerScoresApi",
+                "MemorySize": 2048,
+                "Timeout": 30,
+                "Role": null,
+                "Policies": [ "AWSLambdaBasicExecutionRole" ],
+                "Events": {
+                    "PostResource": {
+                        "Type": "Api",
+                        "Properties": {
+                            "Path": "/teams/{name}",
+                            "Method": "GET"
+                        }
+                    }
+                }
+            }
+        },
+
     }
 
     "Outputs" : {
