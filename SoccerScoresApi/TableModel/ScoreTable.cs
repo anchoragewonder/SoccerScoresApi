@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SoccerScoresApi.TableModel
 {
-    public class SoccerTable
+    public class ScoreTable
     {
         public int id { get; set; }
         public string date { get; set; }
@@ -13,9 +13,9 @@ namespace SoccerScoresApi.TableModel
         public int homeScore { get; set; }
         public int awayScore { get; set; }
 
-        public SoccerTable() { }
+        public ScoreTable() { }
 
-        public SoccerTable(int id, string date, string homeTeam, string awayTeam, int homeScore, int awayScore)
+        public ScoreTable(int id, string date, string homeTeam, string awayTeam, int homeScore, int awayScore)
         {
             this.id = id;
             this.date = date;

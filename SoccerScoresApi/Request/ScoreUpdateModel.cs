@@ -42,7 +42,16 @@ namespace SoccerScoresApi.ResponseModel
 
         public ScoreUpdateModel() { }
 
-        public ScoreUpdateModel(TableModel.SoccerTable model)
+        public ScoreUpdateModel(string date, string homeTeam, string awayTeam, int? homeScore, int? awayScore)
+        {
+            this.date = date;
+            this.homeTeam = homeTeam;
+            this.awayTeam = awayTeam;
+            this.homeScore = homeScore;
+            this.awayScore = awayScore;
+        }
+
+        public ScoreUpdateModel(TableModel.ScoreTable model)
         {
             this.date = model.date;
             this.homeTeam = model.homeTeam;

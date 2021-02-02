@@ -18,7 +18,7 @@ namespace SoccerScoresApi.DbSchema
     {
         private const string Table = "soccer_table";
 
-        public async Task<bool> UpdateScore(ScoreRequest request)
+        public async Task<bool> UpdateScore(ScoreResponseModel request)
         {
             foreach (ScoreUpdateModel s in request.Matches)
             {
@@ -44,7 +44,7 @@ namespace SoccerScoresApi.DbSchema
             try
             {
                 //python scraping inputs go here
-                string commandText = "INSERT INTO {Table} (id, date, home_team, away_team, home_score, away_score) Values(null,@date @home_team, @away_team, @home_score, @away_score)";
+                string commandText = $"INSERT INTO {Table} (id, date, home_team, away_team, home_score, away_score) VALUES(null, @date, @home_team, @away_team, @home_score, @away_score);";
                 MySqlCommand cmd = new MySqlCommand(commandText, connection.Connection);
                 cmd.Parameters.AddWithValue("@date", request.date);
                 cmd.Parameters.AddWithValue("@home_team", request.homeTeam);
@@ -62,7 +62,7 @@ namespace SoccerScoresApi.DbSchema
             }
         }
 
-        public async Task<List<SoccerTable>> GetTeam(string name)
+        public async Task<List<ScoreTable>> GetTeam(string name)
         {
             DbConnector connection = new DbConnector();
             if (!(await connection.IsConnected()))
@@ -76,10 +76,10 @@ namespace SoccerScoresApi.DbSchema
                 cmd.Parameters.AddWithValue("@name", name);
                 MySqlDataReader reader = cmd.ExecuteReader();
 
-                List<SoccerTable> teamGamesScore = new List<SoccerTable>();
+                List<ScoreTable> teamGamesScore = new List<ScoreTable>();
                 while (reader.Read())
                 {
-                    SoccerTable team = MySqlDataReaderToScore(reader);
+                    ScoreTable team = MySqlDataReaderToScore(reader);
                     teamGamesScore.Add(team);
                 }
                 reader.Close();
@@ -102,7 +102,7 @@ namespace SoccerScoresApi.DbSchema
             }
             return results;
         }
-        private SoccerTable MySqlDataReaderToScore(MySqlDataReader reader)
+        private ScoreTable MySqlDataReaderToScore(MySqlDataReader reader)
         {
             Dictionary<string, object> dict = SerializeReader(reader);
 
@@ -113,7 +113,7 @@ namespace SoccerScoresApi.DbSchema
             int homeScore = Int32.Parse(reader["home_score"].ToString());
             int awayScore = Int32.Parse(reader["away_score"].ToString());
 
-            return new SoccerTable(id, date, homeTeam, awayTeam, homeScore, awayScore);
+            return new ScoreTable(id, date, homeTeam, awayTeam, homeScore, awayScore);
 
         }
     }

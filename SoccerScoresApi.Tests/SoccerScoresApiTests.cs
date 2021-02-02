@@ -13,6 +13,10 @@ using SoccerScoresApi.Extension;
 using SoccerScoresApi.ResponseModel;
 using Newtonsoft.Json;
 using SoccerScoresApi.RequestModel;
+using SoccerScoresApi.Functions;
+
+using System.Text.RegularExpressions;
+using Xunit.Abstractions;
 
 namespace SoccerScoresApi.Tests
 {
@@ -20,7 +24,9 @@ namespace SoccerScoresApi.Tests
     {
         public SoccerScoresApiTests()
         {
+            
         }
+
 
         [Fact]
         public async void TestDBConnection()
@@ -37,17 +43,30 @@ namespace SoccerScoresApi.Tests
             ScoreUpdateFunction func = new ScoreUpdateFunction();
             APIGatewayProxyRequest request = new APIGatewayProxyRequest();
 
-            // insert json here with a few values?
-            var body = new ScoreRequest(testJson);
+            ScoreUpdateModel model = new ScoreUpdateModel("date", "home", "away", 1, 0);
+            List<ScoreUpdateModel> list = new List<ScoreUpdateModel>() { model };
+            var body = new ScoreResponseModel(list);
             request.Body = JsonConvert.SerializeObject(body);
 
             TestLambdaContext testContext = new TestLambdaContext();
 
-
             var response = await func.Execute(request, testContext);
             Assert.NotNull(response.Body);
             Assert.Equal(200, response.StatusCode);
-
         }
-    }   
+
+        [Fact]
+        public async Task TestEmptyGetFunction()
+        {
+            ScoreGetFunction func = new ScoreGetFunction();
+            APIGatewayProxyRequest request = new APIGatewayProxyRequest();
+            TestLambdaContext testContext = new TestLambdaContext();
+           
+            var response = await func.Execute(request, testContext);
+
+            Assert.NotNull(response.Body);
+            Assert.Equal(200, response.StatusCode);
+        }
+
+    }
 }

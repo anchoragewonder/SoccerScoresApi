@@ -30,6 +30,13 @@ namespace SoccerScoresApi.ResponseModel
 
         public FixtureUpdateModel() { }
 
+        public FixtureUpdateModel(string date, string homeTeam, string awayTeam)
+        {
+            this.date = date;
+            this.homeTeam = homeTeam;
+            this.awayTeam = awayTeam;
+        }
+
         public FixtureUpdateModel(TableModel.FixtureTable model)
         {
             this.date = model.date;

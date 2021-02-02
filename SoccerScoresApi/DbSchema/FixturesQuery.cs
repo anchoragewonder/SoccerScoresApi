@@ -14,7 +14,7 @@ namespace SoccerScoresApi.DbSchema
     {
         private const string Table = "fixtures";
 
-        public async Task<bool> UpdateFixture(FixtureRequest request)
+        public async Task<bool> UpdateFixture(FixtureResponseModel request)
         {
             foreach (FixtureUpdateModel s in request.Matches)
             {
@@ -27,7 +27,6 @@ namespace SoccerScoresApi.DbSchema
             }
             return true;
         }
-
 
         public async Task<bool> UpdateFixture(FixtureUpdateModel request)
         {
@@ -111,4 +110,4 @@ namespace SoccerScoresApi.DbSchema
         }
     }
 }
-}
+

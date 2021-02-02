@@ -8,16 +8,16 @@ using System.Text;
 
 namespace SoccerScoresApi.RequestModel
 {
-    public class FixtureRequest
+    public class FixtureResponseModel
     {
         [JsonProperty(PropertyName = "matches")]
         public List<FixtureUpdateModel> Matches;
 
         public bool isValid { get { return Matches.FirstOrDefault(i => i.isValid == false) == null; } }
 
-        public FixtureRequest() { }
+        public FixtureResponseModel() { }
 
-        public FixtureRequest(List<FixtureTable> list)
+        public FixtureResponseModel(List<FixtureTable> list)
         {
             List<FixtureUpdateModel> matches = new List<FixtureUpdateModel>();
             foreach (FixtureTable tableInstance in list)
