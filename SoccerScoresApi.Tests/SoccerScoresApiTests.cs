@@ -10,9 +10,9 @@ using Amazon.Lambda.APIGatewayEvents;
 
 using SoccerScoresApi;
 using SoccerScoresApi.Extension;
-using SoccerScoresApi.ResponseModel;
-using Newtonsoft.Json;
 using SoccerScoresApi.RequestModel;
+using Newtonsoft.Json;
+using SoccerScoresApi.MatchModels;
 using SoccerScoresApi.Functions;
 
 using System.Text.RegularExpressions;
@@ -43,9 +43,9 @@ namespace SoccerScoresApi.Tests
             ScoreUpdateFunction func = new ScoreUpdateFunction();
             APIGatewayProxyRequest request = new APIGatewayProxyRequest();
 
-            ScoreUpdateModel model = new ScoreUpdateModel("date", "home", "away", 1, 0);
-            List<ScoreUpdateModel> list = new List<ScoreUpdateModel>() { model };
-            var body = new ScoreResponseModel(list);
+            MatchModels.MatchModel model = new MatchModels.MatchModel("date", "home", "away", 1, 0);
+            List<MatchModels.MatchModel> list = new List<MatchModels.MatchModel>() { model };
+            var body = new UpdateMatchesRequest(list);
             request.Body = JsonConvert.SerializeObject(body);
 
             TestLambdaContext testContext = new TestLambdaContext();

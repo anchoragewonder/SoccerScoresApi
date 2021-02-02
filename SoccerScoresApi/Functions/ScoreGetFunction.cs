@@ -7,10 +7,10 @@ using Amazon.Lambda.Core;
 using Amazon.Lambda.APIGatewayEvents;
 using Newtonsoft.Json;
 
-using SoccerScoresApi.RequestModel;
+using SoccerScoresApi.MatchModels;
 using SoccerScoresApi.DbSchema;
 using System.Threading.Tasks;
-using SoccerScoresApi.ResponseModel;
+using SoccerScoresApi.RequestModel;
 using SoccerScoresApi.TableModel;
 
 namespace SoccerScoresApi.Functions
@@ -29,7 +29,7 @@ namespace SoccerScoresApi.Functions
 
             if (apigProxyEvent.PathParameters == null)
             {
-                List<ScoreUpdateModel> example = await GetScores("Manchester United");
+                List<MatchModel> example = await GetScores("Manchester United");
                 return new APIGatewayProxyResponse
                 {
                     Body = $"{EXAMPLE_TEXT}\n{JsonConvert.SerializeObject(example, Formatting.Indented)}",
@@ -42,7 +42,7 @@ namespace SoccerScoresApi.Functions
 
             try
             {
-                List<ScoreUpdateModel> response = await GetScores(name);
+                List<MatchModel> response = await GetScores(name);
 
                 return new APIGatewayProxyResponse
                 {
@@ -62,16 +62,16 @@ namespace SoccerScoresApi.Functions
             }
         }
     
-        public async Task<List<ScoreUpdateModel>> GetScores(string name)
+        public async Task<List<MatchModel>> GetScores(string name)
         {
-            TableQuery newScore = new TableQuery();
+            ScoreQuery newScore = new ScoreQuery();
             List<ScoreTable> tableModel = await newScore.GetTeam(name);
-            List<ScoreUpdateModel> totalResponses = new List<ScoreUpdateModel>();
+            List<MatchModel> totalResponses = new List<MatchModel>();
 
             foreach (ScoreTable match in tableModel)
             {
 
-                ScoreUpdateModel response = new ScoreUpdateModel(match);
+                MatchModel response = new MatchModel(match);
 
                 totalResponses.Add(response);
             }

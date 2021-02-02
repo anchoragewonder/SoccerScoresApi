@@ -26,11 +26,11 @@ namespace SoccerScoresApi
 
         public async Task<APIGatewayProxyResponse> Execute(APIGatewayProxyRequest apigProxyEvent, ILambdaContext context)
         {
-            ScoreResponseModel jsonRequest;
+            UpdateMatchesRequest jsonRequest;
 
             try
             {
-                jsonRequest = JsonConvert.DeserializeObject<ScoreResponseModel>(apigProxyEvent.Body);
+                jsonRequest = JsonConvert.DeserializeObject<UpdateMatchesRequest>(apigProxyEvent.Body);
                 if (!jsonRequest.isValid)
                 {
                     // check for valid json from scraper
@@ -69,9 +69,9 @@ namespace SoccerScoresApi
                 };
             }
         }
-        public async Task<bool> GetResponse(ScoreResponseModel request)
+        public async Task<bool> GetResponse(UpdateMatchesRequest request)
         {
-            TableQuery scores = new TableQuery();
+            ScoreQuery scores = new ScoreQuery();
             bool didUpdate = await scores.UpdateScore(request);
 
             return didUpdate;

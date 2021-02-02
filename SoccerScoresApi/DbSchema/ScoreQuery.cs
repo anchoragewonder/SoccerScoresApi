@@ -8,19 +8,19 @@ using MySql;
 using MySql.Data.MySqlClient;
 
 using SoccerScoresApi.TableModel;
-using SoccerScoresApi.ResponseModel;
-using SoccerScoresApi.Extension;
 using SoccerScoresApi.RequestModel;
+using SoccerScoresApi.Extension;
+using SoccerScoresApi.MatchModels;
 
 namespace SoccerScoresApi.DbSchema
 {
-    public class TableQuery
+    public class ScoreQuery
     {
         private const string Table = "soccer_table";
 
-        public async Task<bool> UpdateScore(ScoreResponseModel request)
+        public async Task<bool> UpdateScore(UpdateMatchesRequest request)
         {
-            foreach (ScoreUpdateModel s in request.Matches)
+            foreach (MatchModel s in request.Matches)
             {
                 bool success = await UpdateScore(s);
 
@@ -33,7 +33,7 @@ namespace SoccerScoresApi.DbSchema
         }
 
 
-        public async Task<bool> UpdateScore(ScoreUpdateModel request)
+        public async Task<bool> UpdateScore(MatchModel request)
         {   
             
             DbConnector connection = new DbConnector();

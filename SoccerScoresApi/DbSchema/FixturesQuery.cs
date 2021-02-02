@@ -1,7 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using SoccerScoresApi.Extension;
+using SoccerScoresApi.MatchModels;
 using SoccerScoresApi.RequestModel;
-using SoccerScoresApi.ResponseModel;
 using SoccerScoresApi.TableModel;
 using System;
 using System.Collections.Generic;
@@ -14,9 +14,9 @@ namespace SoccerScoresApi.DbSchema
     {
         private const string Table = "fixtures";
 
-        public async Task<bool> UpdateFixture(FixtureResponseModel request)
+        public async Task<bool> UpdateFixture(UpdateMatchesRequest request)
         {
-            foreach (FixtureUpdateModel s in request.Matches)
+            foreach (MatchModel s in request.Matches)
             {
                 bool success = await UpdateFixture(s);
 
@@ -28,7 +28,7 @@ namespace SoccerScoresApi.DbSchema
             return true;
         }
 
-        public async Task<bool> UpdateFixture(FixtureUpdateModel request)
+        public async Task<bool> UpdateFixture(MatchModel request)
         {
 
             DbConnector connection = new DbConnector();

@@ -10,12 +10,12 @@ namespace SoccerScoresApi.TableModel
         public string date { get; set; }
         public string homeTeam { get; set; }
         public string awayTeam { get; set; }
-        public int homeScore { get; set; }
-        public int awayScore { get; set; }
+        public int? homeScore { get; set; }
+        public int? awayScore { get; set; }
 
         public ScoreTable() { }
 
-        public ScoreTable(int id, string date, string homeTeam, string awayTeam, int homeScore, int awayScore)
+        public ScoreTable(int id, string date, string homeTeam, string awayTeam, int? homeScore, int? awayScore)
         {
             this.id = id;
             this.date = date;
