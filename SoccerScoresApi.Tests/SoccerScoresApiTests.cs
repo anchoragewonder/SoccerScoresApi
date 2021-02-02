@@ -10,6 +10,9 @@ using Amazon.Lambda.APIGatewayEvents;
 
 using SoccerScoresApi;
 using SoccerScoresApi.Extension;
+using SoccerScoresApi.ResponseModel;
+using Newtonsoft.Json;
+using SoccerScoresApi.RequestModel;
 
 namespace SoccerScoresApi.Tests
 {
@@ -33,9 +36,15 @@ namespace SoccerScoresApi.Tests
         {
             ScoreUpdateFunction func = new ScoreUpdateFunction();
             APIGatewayProxyRequest request = new APIGatewayProxyRequest();
+
+            // insert json here with a few values?
+            var body = new ScoreRequest(testJson);
+            request.Body = JsonConvert.SerializeObject(body);
+
             TestLambdaContext testContext = new TestLambdaContext();
 
-            APIGatewayProxyResponse response = await func.Execute(request, testContext);
+
+            var response = await func.Execute(request, testContext);
             Assert.NotNull(response.Body);
             Assert.Equal(200, response.StatusCode);
 
