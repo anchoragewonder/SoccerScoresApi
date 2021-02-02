@@ -14,7 +14,19 @@ namespace SoccerScoresApi.ResponseModel
         public string homeTeam { get; set; }
 
         [JsonProperty(PropertyName = "awayTeam", Order = 3)]
-        public string awayTeam { get; set; }  
+        public string awayTeam { get; set; }
+
+        public bool isValid
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(date) || string.IsNullOrEmpty(homeTeam) || string.IsNullOrEmpty(awayTeam))
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
 
         public FixtureUpdateModel() { }
 
