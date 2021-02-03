@@ -18,11 +18,11 @@ namespace SoccerScoresApi.DbSchema
     {
         private const string Table = "soccer_table";
 
-        public async Task<bool> UpdateScore(UpdateMatchesRequest request)
+        public async Task<bool> InsertMatches(UpdateMatchesRequest request)
         {
             foreach (MatchModel s in request.Matches)
             {
-                bool success = await UpdateScore(s);
+                bool success = await InsertMatch(s);
 
                 if (!success)
                 {
@@ -32,8 +32,7 @@ namespace SoccerScoresApi.DbSchema
             return true;
         }
 
-
-        public async Task<bool> UpdateScore(MatchModel request)
+        public async Task<bool> InsertMatch(MatchModel request)
         {   
             
             DbConnector connection = new DbConnector();
@@ -110,8 +109,21 @@ namespace SoccerScoresApi.DbSchema
             string date = reader["date"].ToString();
             string homeTeam = reader["home_team"].ToString();
             string awayTeam = reader["away_team"].ToString();
-            int homeScore = Int32.Parse(reader["home_score"].ToString());
-            int awayScore = Int32.Parse(reader["away_score"].ToString());
+
+            _ = dict.TryGetValue("home_score", out object home_obj);
+            _ = dict.TryGetValue("away_score", out object away_obj);
+
+            int? homeScore = null;
+            int? awayScore = null;
+            if(home_obj != null)
+            {
+                homeScore = Int32.Parse(home_obj.ToString());
+            }
+            if(away_obj != null)
+            {
+                awayScore = Int32.Parse(away_obj.ToString());
+            }
+            
 
             return new ScoreTable(id, date, homeTeam, awayTeam, homeScore, awayScore);
 

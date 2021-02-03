@@ -72,7 +72,7 @@ namespace SoccerScoresApi
         public async Task<bool> GetResponse(UpdateMatchesRequest request)
         {
             ScoreQuery scores = new ScoreQuery();
-            bool didUpdate = await scores.UpdateScore(request);
+            bool didUpdate = await scores.InsertMatches(request);
 
             return didUpdate;
         }

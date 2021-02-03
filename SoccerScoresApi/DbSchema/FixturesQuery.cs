@@ -53,7 +53,7 @@ namespace SoccerScoresApi.DbSchema
                 return false;
             }
         }
-        public async Task<List<FixtureTable>> GetTeam(string name)
+        /*public async Task<List<FixtureTable>> GetTeam(string name)
         {
             DbConnector connection = new DbConnector();
             if (!(await connection.IsConnected()))
@@ -106,7 +106,7 @@ namespace SoccerScoresApi.DbSchema
 
             return new FixtureTable(id, date, homeTeam, awayTeam);
 
-        }
+        }*/
     }
 }
 
