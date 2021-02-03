@@ -32,10 +32,6 @@ namespace SoccerScoresApi.MatchModels
                 {
                     return false;
                 }
-                if(homeScore == null || awayScore == null)
-                {
-                    return false;
-                }
                 return true;
             }
         }

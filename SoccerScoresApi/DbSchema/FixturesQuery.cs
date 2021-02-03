@@ -39,13 +39,11 @@ namespace SoccerScoresApi.DbSchema
             try
             {
                 //python scraping inputs go here
-                string commandText = "INSERT INTO {Table} (id, date, home_team, away_team) Values(null,@date @home_team, @away_team)";
+                string commandText = $"INSERT INTO {Table} (id, date, home_team, away_team) Values(null,@date @home_team, @away_team)";
                 MySqlCommand cmd = new MySqlCommand(commandText, connection.Connection);
                 cmd.Parameters.AddWithValue("@date", request.date);
                 cmd.Parameters.AddWithValue("@home_team", request.homeTeam);
                 cmd.Parameters.AddWithValue("@away_team", request.awayTeam);
-                
-
                 MySqlDataReader reader = cmd.ExecuteReader();
                 return true;
             }
@@ -68,13 +66,14 @@ namespace SoccerScoresApi.DbSchema
                 MySqlCommand cmd = new MySqlCommand(commandText, connection.Connection);
                 cmd.Parameters.AddWithValue("@name", name);
                 MySqlDataReader reader = cmd.ExecuteReader();
-
                 List<FixtureTable> teamMatches = new List<FixtureTable>();
+
                 while (reader.Read())
                 {
                     FixtureTable team = MySqlDataReaderFixtures(reader);
                     teamMatches.Add(team);
                 }
+
                 reader.Close();
                 await connection.Disconnect();
                 return teamMatches;
