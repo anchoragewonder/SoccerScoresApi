@@ -100,10 +100,10 @@ namespace SoccerScoresApi.DbSchema
             }
             try
             {
-                //python scraping inputs go here
-                string commandText = $"UPDATE {Table}  SET (home_score, away_score) WHERE (home_team = @home_team, away_team=@away_team);";
+                
+                string commandText = $"UPDATE {Table} SET (home_score = @home_score, away_score = @away_score) WHERE (home_team = @home_team AND away_team = @away_team);";
                 MySqlCommand cmd = new MySqlCommand(commandText, connection.Connection);
-                cmd.Parameters.AddWithValue("@date", request.date);
+                
                 cmd.Parameters.AddWithValue("@home_team", request.homeTeam);
                 cmd.Parameters.AddWithValue("@away_team", request.awayTeam);
                 cmd.Parameters.AddWithValue("@home_score", request.homeScore);
@@ -113,6 +113,28 @@ namespace SoccerScoresApi.DbSchema
                 return true;
             }
             catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+
+        }
+
+        public async Task<bool> DeleteEmptyScore()
+        {
+            DbConnector connection = new DbConnector();
+            if (!(await connection.IsConnected()))
+            {
+                throw new Exception();
+            }
+            try
+            {
+                string commandText = $"DELETE FROM {Table} WHERE (home_score = null AND away_score = null;";
+                MySqlCommand cmd = new MySqlCommand(commandText, connection.Connection);
+                MySqlDataReader reader = cmd.ExecuteReader();
+                return true;
+            }
+            catch(Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return false;
