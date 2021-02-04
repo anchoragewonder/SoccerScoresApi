@@ -60,7 +60,6 @@ namespace SoccerScoresApi.DbSchema
                 return false;
             }
         }
-
         public async Task<List<ScoreTable>> GetTeam(string name)
         {
             DbConnector connection = new DbConnector();
@@ -92,6 +91,34 @@ namespace SoccerScoresApi.DbSchema
             }
         }
 
+        public async Task<bool> UpdateMatch(MatchModel request)
+        {
+            DbConnector connection = new DbConnector();
+            if (!(await connection.IsConnected()))
+            {
+                throw new Exception();
+            }
+            try
+            {
+                //python scraping inputs go here
+                string commandText = $"UPDATE {Table}  SET (home_score, away_score) WHERE (home_team = @home_team, away_team=@away_team);";
+                MySqlCommand cmd = new MySqlCommand(commandText, connection.Connection);
+                cmd.Parameters.AddWithValue("@date", request.date);
+                cmd.Parameters.AddWithValue("@home_team", request.homeTeam);
+                cmd.Parameters.AddWithValue("@away_team", request.awayTeam);
+                cmd.Parameters.AddWithValue("@home_score", request.homeScore);
+                cmd.Parameters.AddWithValue("@away_score", request.awayScore);
+
+                MySqlDataReader reader = cmd.ExecuteReader();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+
+        }
         public Dictionary<string, object> SerializeReader(MySqlDataReader reader)
         {
             var results = new Dictionary<string, object>();
@@ -124,9 +151,7 @@ namespace SoccerScoresApi.DbSchema
                 awayScore = Int32.Parse(away_obj.ToString());
             }
             
-
             return new ScoreTable(id, date, homeTeam, awayTeam, homeScore, awayScore);
-
         }
     }
 }
