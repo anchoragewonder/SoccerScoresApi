@@ -50,9 +50,16 @@ namespace SoccerScoresApi.DbSchema
                 cmd.Parameters.AddWithValue("@away_team", request.awayTeam);
                 cmd.Parameters.AddWithValue("@home_score", request.homeScore);
                 cmd.Parameters.AddWithValue("@away_score", request.awayScore);
-               
-                MySqlDataReader reader = cmd.ExecuteReader();
-                return true;
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                if (rowsAffected == 1)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             catch(Exception ex)
             {
@@ -91,11 +98,11 @@ namespace SoccerScoresApi.DbSchema
             }
         }
 
-        public async Task<bool> UpdateMatches(UpdateMatchesRequest request)
+        public async Task<bool> CheckValidTable(UpdateMatchesRequest request)
         {
             foreach (MatchModel s in request.Matches)
             {
-                bool success = await UpdateMatch(s);
+                bool success = await CheckValidTable(s);
 
                 if (!success)
                 {
@@ -104,7 +111,7 @@ namespace SoccerScoresApi.DbSchema
             }
             return true;
         }
-        public async Task<bool> UpdateMatch(MatchModel request)
+        public async Task<bool> CheckValidTable(MatchModel request)
         {
             DbConnector connection = new DbConnector();
             if (!(await connection.IsConnected()))
@@ -113,24 +120,38 @@ namespace SoccerScoresApi.DbSchema
             }
             try
             {
-                
-                string commandText = $"UPDATE {Table} SET (home_score = @home_score, away_score = @away_score) WHERE (home_team = @home_team AND away_team = @away_team);";
+                string commandText = $"IF NOT EXISTS ( SELECT 1 FROM {Table} WHERE home_team = @home_team AND away_team = @away_team AND date = @date)" +
+                    $"BEGIN" +
+                    $"  INSERT INTO {Table} (id, date, home_team, away_team, home_score, away_score) VALUES(null, @date, @home_team, @away_team, @home_score, @away_score)" +
+                    $"END" +
+                    $"ELSE" +
+                    $"BEGIN" +
+                    $"  UPDATE {Table} SET(home_score = @home_score, away_score = @away_score) WHERE(home_team = @home_team AND away_team = @away_team)" +
+                    $"END";
+
                 MySqlCommand cmd = new MySqlCommand(commandText, connection.Connection);
-                
+                cmd.Parameters.AddWithValue("@date", request.date);
                 cmd.Parameters.AddWithValue("@home_team", request.homeTeam);
                 cmd.Parameters.AddWithValue("@away_team", request.awayTeam);
                 cmd.Parameters.AddWithValue("@home_score", request.homeScore);
                 cmd.Parameters.AddWithValue("@away_score", request.awayScore);
+                int rowsAffected = cmd.ExecuteNonQuery();
 
-                MySqlDataReader reader = cmd.ExecuteReader();
-                return true;
+                if(rowsAffected == 1)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+                
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine("exeption caught", ex);
                 return false;
             }
-
         }
 
         public async Task<bool> DeleteEmptyScore()
@@ -144,8 +165,16 @@ namespace SoccerScoresApi.DbSchema
             {
                 string commandText = $"DELETE FROM {Table} WHERE (home_score = null AND away_score = null;";
                 MySqlCommand cmd = new MySqlCommand(commandText, connection.Connection);
-                MySqlDataReader reader = cmd.ExecuteReader();
-                return true;
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                if (rowsAffected == 1)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             catch(Exception ex)
             {

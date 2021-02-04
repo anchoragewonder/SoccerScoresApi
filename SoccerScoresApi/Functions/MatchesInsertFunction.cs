@@ -10,8 +10,10 @@ using Amazon.Lambda.Core;
 using Amazon.Lambda.APIGatewayEvents;
 using Newtonsoft.Json;
 
+using SoccerScoresApi.MatchModels;
 using SoccerScoresApi.RequestModel;
 using SoccerScoresApi.DbSchema;
+using SoccerScoresApi.TableModel;
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
@@ -72,8 +74,24 @@ namespace SoccerScoresApi
         public async Task<bool> GetResponse(UpdateMatchesRequest request)
         {
             ScoreQuery scores = new ScoreQuery();
+            Task<List<ScoreTable>> testList = scores.CheckValidTable();
+
+
+            foreach(MatchModel game in request.Matches)
+            {
+                if (game.homeScore == null && game.awayScore == null)
+                {
+                    
+                    
+                }
+            }
+
             bool didUpdate = await scores.InsertMatches(request);
 
+            if (didUpdate)
+            {
+
+            }
             return didUpdate;
         }
 
