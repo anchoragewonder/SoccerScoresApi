@@ -19,10 +19,10 @@ using SoccerScoresApi.TableModel;
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
 namespace SoccerScoresApi
 {
-    public class MatchesInsertFunction
+    public class UpsertMatchesFunction
     {
         
-        public MatchesInsertFunction()
+        public UpsertMatchesFunction()
         {
         }
 
@@ -73,27 +73,9 @@ namespace SoccerScoresApi
         }
         public async Task<bool> GetResponse(UpdateMatchesRequest request)
         {
-            ScoreQuery scores = new ScoreQuery();
-            Task<List<ScoreTable>> testList = scores.CheckValidTable();
-
-
-            foreach(MatchModel game in request.Matches)
-            {
-                if (game.homeScore == null && game.awayScore == null)
-                {
-                    
-                    
-                }
-            }
-
-            bool didUpdate = await scores.InsertMatches(request);
-
-            if (didUpdate)
-            {
-
-            }
-            return didUpdate;
+            bool isDeleted = await SoccerTableFunctionsHandler.DeleteEmptyScores();
+            bool isInserted = await MatchModelCRUDInterface.TryUpsertMatches(request);
+            return isDeleted && isInserted;
         }
-
     }
 }

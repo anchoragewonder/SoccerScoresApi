@@ -15,12 +15,12 @@ using SoccerScoresApi.TableModel;
 
 namespace SoccerScoresApi.Functions
 {
-    public class ScoreGetFunction
+    public class GetMatchesFunction
     {
         private const string EXAMPLE_TEXT = "Here is how to use my api." +
             "Enter a premier league team name and the scores and fixtures for all of thier  matches will be generated.";
 
-        public ScoreGetFunction()
+        public GetMatchesFunction()
         {
         }
 
@@ -64,18 +64,9 @@ namespace SoccerScoresApi.Functions
     
         public async Task<List<MatchModel>> GetScores(string name)
         {
-            ScoreQuery newScore = new ScoreQuery();
-            List<ScoreTable> tableModel = await newScore.GetTeam(name);
+            List<ScoreTable> tableModel = await SoccerTableFunctionsHandler.GetMatchesForTeam(name);
             List<MatchModel> totalResponses = new List<MatchModel>();
-
-            foreach (ScoreTable match in tableModel)
-            {
-
-                MatchModel response = new MatchModel(match);
-
-                totalResponses.Add(response);
-            }
-                
+            tableModel.ForEach(i => totalResponses.Add(new MatchModel(i)));
             return totalResponses;
         }
     }
