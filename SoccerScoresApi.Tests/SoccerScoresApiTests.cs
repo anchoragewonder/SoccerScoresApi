@@ -40,10 +40,10 @@ namespace SoccerScoresApi.Tests
         [Fact]
         public async Task TestUpdateFunction()
         {
-            MatchesInsertFunction func = new MatchesInsertFunction();
+            UpsertMatchesFunction func = new UpsertMatchesFunction();
             APIGatewayProxyRequest request = new APIGatewayProxyRequest();
 
-            MatchModels.MatchModel model = new MatchModels.MatchModel("date", "home", "away", 1, 0);
+            MatchModels.MatchModel model = new MatchModels.MatchModel("date", "home", "away", 1, 1);
             List<MatchModels.MatchModel> list = new List<MatchModels.MatchModel>() { model };
             var body = new UpdateMatchesRequest(list);
             request.Body = JsonConvert.SerializeObject(body);
@@ -58,15 +58,31 @@ namespace SoccerScoresApi.Tests
         [Fact]
         public async Task TestEmptyGetFunction()
         {
-            ScoreGetFunction func = new ScoreGetFunction();
+            GetMatchesFunction func = new GetMatchesFunction();
             APIGatewayProxyRequest request = new APIGatewayProxyRequest();
             TestLambdaContext testContext = new TestLambdaContext();
-           
+
             var response = await func.Execute(request, testContext);
 
             Assert.NotNull(response.Body);
             Assert.Equal(200, response.StatusCode);
         }
 
+        [Fact]
+        public async Task TestGetFunction()
+        {
+            GetMatchesFunction func = new GetMatchesFunction();
+            APIGatewayProxyRequest request = new APIGatewayProxyRequest();
+            TestLambdaContext testContext = new TestLambdaContext();
+            request.PathParameters = new Dictionary<string, string>()
+            {
+                { "team_name", "home" }
+            };
+
+            var response = await func.Execute(request, testContext);
+
+            Assert.NotNull(response.Body);
+            Assert.Equal(200, response.StatusCode);
+        }
     }
 }
