@@ -17,10 +17,10 @@ using SoccerScoresApi.DbSchema;
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
 namespace SoccerScoresApi
 {
-    public class ScoreUpdateFunction
+    public class MatchesInsertFunction
     {
         
-        public ScoreUpdateFunction()
+        public MatchesInsertFunction()
         {
         }
 

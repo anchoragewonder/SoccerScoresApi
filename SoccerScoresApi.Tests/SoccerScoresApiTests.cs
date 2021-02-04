@@ -40,7 +40,7 @@ namespace SoccerScoresApi.Tests
         [Fact]
         public async Task TestUpdateFunction()
         {
-            ScoreUpdateFunction func = new ScoreUpdateFunction();
+            MatchesInsertFunction func = new MatchesInsertFunction();
             APIGatewayProxyRequest request = new APIGatewayProxyRequest();
 
             MatchModels.MatchModel model = new MatchModels.MatchModel("date", "home", "away", 1, 0);

@@ -91,6 +91,19 @@ namespace SoccerScoresApi.DbSchema
             }
         }
 
+        public async Task<bool> UpdateMatches(UpdateMatchesRequest request)
+        {
+            foreach (MatchModel s in request.Matches)
+            {
+                bool success = await UpdateMatch(s);
+
+                if (!success)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
         public async Task<bool> UpdateMatch(MatchModel request)
         {
             DbConnector connection = new DbConnector();
