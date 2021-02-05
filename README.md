@@ -80,19 +80,13 @@ aws s3 mb s3://BUCKET_NAME
 Next, run the following command to package our Lambda function to S3:
 
 ```bash
-sam package \
-    --template-file template.yaml \
-    --output-template-file packaged.yaml \
-    --s3-bucket REPLACE_THIS_WITH_YOUR_S3_BUCKET_NAME
+sam package --template-file template.yaml --output-template-file packaged.yaml --s3-bucket anchoragewonder-deploys
 ```
 
 Next, the following command will create a Cloudformation Stack and deploy your SAM resources.
 
 ```bash
-sam deploy \
-    --template-file packaged.yaml \
-    --stack-name soccerscoresapi \
-    --capabilities CAPABILITY_IAM
+sam deploy --template-file packaged.yaml --stack-name soccerscoresapi --capabilities CAPABILITY_IAM
 ```
 
 > **See [Serverless Application Model (SAM) HOWTO Guide](https://github.com/awslabs/serverless-application-model/blob/master/HOWTO.md) for more details in how to get started.**
