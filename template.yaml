@@ -26,7 +26,7 @@
             "Type" : "AWS::Serverless::Function",
             "Properties": {
             "Handler": "SoccerScoresApi::SoccerScoresApi.Functions.UpsertMatchesFunction::Execute",
-                "Runtime": "dotnetcore2.1",
+                "Runtime": "dotnetcore3.1",
                 "CodeUri": "publish/SoccerScoresApi",
                 "MemorySize": 2048,
                 "Timeout": 30,
@@ -47,7 +47,7 @@
             "Type" : "AWS::Serverless::Function",
             "Properties": {
             "Handler": "SoccerScoresApi::SoccerScoresApi.Functions.GetMatchesFunction::Execute",
-                "Runtime": "dotnetcore2.1",
+                "Runtime": "dotnetcore3.1",
                 "CodeUri": "publish/SoccerScoresApi",
                 "MemorySize": 2048,
                 "Timeout": 30,
@@ -67,8 +67,8 @@
         "MatchesGet" : {
             "Type" : "AWS::Serverless::Function",
             "Properties": {
-            "Handler": "SoccerScoresApi::SoccerScoresApiFunction.GetMatchesFunction::Execute",
-                "Runtime": "dotnetcore2.1",
+            "Handler": "SoccerScoresApi::SoccerScoresApi.Functions.GetMatchesFunction::Execute",
+                "Runtime": "dotnetcore3.1",
                 "CodeUri": "publish/SoccerScoresApi",
                 "MemorySize": 2048,
                 "Timeout": 30,
