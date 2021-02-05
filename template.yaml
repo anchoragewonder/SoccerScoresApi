@@ -26,7 +26,7 @@
         "ScoreUpdate" : {
             "Type" : "AWS::Serverless::Function",
             "Properties": {
-            "Handler": "SoccerScoresApi::SoccerScoresApiFunction.UpsertMatchesFunction::Execute",
+            "Handler": "SoccerScoresApi::SoccerScoresApi.Functions.UpsertMatchesFunction::Execute",
                 "Runtime": "dotnetcore2.1",
                 "CodeUri": "publish/SoccerScoresApi",
                 "MemorySize": 2048,
@@ -47,7 +47,7 @@
         "EmptyGet" : {
             "Type" : "AWS::Serverless::Function",
             "Properties": {
-            "Handler": "SoccerScoresApi::SoccerScoresApiFunction.GetMatchesFunction::Execute",
+            "Handler": "SoccerScoresApi::SoccerScoresApi.Functions.GetMatchesFunction::Execute",
                 "Runtime": "dotnetcore2.1",
                 "CodeUri": "publish/SoccerScoresApi",
                 "MemorySize": 2048,
