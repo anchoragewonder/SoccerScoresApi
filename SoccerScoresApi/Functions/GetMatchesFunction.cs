@@ -17,8 +17,11 @@ namespace SoccerScoresApi.Functions
 {
     public class GetMatchesFunction
     {
-        private const string EXAMPLE_TEXT = "Here is how to use my api." +
-            "Enter a premier league team name and the scores and fixtures for all of thier  matches will be generated.";
+        public const string EXAMPLE_HEADER = "Here is how to use my api.";
+
+        private const string EXAMPLE_TEXT = "Enter a premier league team name and the scores and fixtures for all of thier  matches will be generated.";
+
+        private const string MANCHESTER_UNITED = "ManchesterUnited";
 
         public GetMatchesFunction()
         {
@@ -26,13 +29,13 @@ namespace SoccerScoresApi.Functions
 
         public async Task<APIGatewayProxyResponse> Execute(APIGatewayProxyRequest apigProxyEvent, ILambdaContext context)
         {
-
-            if (apigProxyEvent.PathParameters == null)
+            if(apigProxyEvent.PathParameters == null || apigProxyEvent.PathParameters.Count == 0)
             {
-                List<MatchModel> example = await GetScores("ManchesterUnited");
+                List<MatchModel> example = await GetScores(MANCHESTER_UNITED);
+                string matches = JsonConvert.SerializeObject(example, Formatting.Indented);
                 return new APIGatewayProxyResponse
                 {
-                    Body = $"{EXAMPLE_TEXT}\n{JsonConvert.SerializeObject(example, Formatting.Indented)}",
+                    Body = $"{EXAMPLE_HEADER}\n{EXAMPLE_TEXT}\n{matches}",
                     StatusCode = 200,
                     Headers = new Dictionary<string, string> { { "Content-Type", "application/json" }, { "Access-Control-Allow-Origin", "*" } }
                 };

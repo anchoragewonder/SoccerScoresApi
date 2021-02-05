@@ -27,7 +27,6 @@ namespace SoccerScoresApi.Tests
             
         }
 
-
         [Fact]
         public async void TestDBConnection()
         {
@@ -60,29 +59,36 @@ namespace SoccerScoresApi.Tests
         {
             GetMatchesFunction func = new GetMatchesFunction();
             APIGatewayProxyRequest request = new APIGatewayProxyRequest();
+            request.PathParameters = new Dictionary<string, string>();
             TestLambdaContext testContext = new TestLambdaContext();
 
             var response = await func.Execute(request, testContext);
 
             Assert.NotNull(response.Body);
             Assert.Equal(200, response.StatusCode);
+            Assert.Contains(GetMatchesFunction.EXAMPLE_HEADER, response.Body);
         }
 
         [Fact]
         public async Task TestGetFunction()
         {
+            await TestUpdateFunction();
+
             GetMatchesFunction func = new GetMatchesFunction();
             APIGatewayProxyRequest request = new APIGatewayProxyRequest();
             TestLambdaContext testContext = new TestLambdaContext();
             request.PathParameters = new Dictionary<string, string>()
             {
-                { "team_name", "home" }
+                { "name", "home" }
             };
 
             var response = await func.Execute(request, testContext);
 
             Assert.NotNull(response.Body);
             Assert.Equal(200, response.StatusCode);
+
+            var json = JsonConvert.DeserializeObject<List<MatchModel>>(response.Body);
+            Assert.NotEmpty(json);
         }
     }
 }
