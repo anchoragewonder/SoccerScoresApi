@@ -36,7 +36,7 @@
                     "PostResource": {
                         "Type": "Api",
                         "Properties": {
-                            "Path": "/update",
+                            "Path": "/update/",
                             "Method": "POST"
                         }
                     }

@@ -51,7 +51,7 @@ Resources:
   MatchesGet:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: SoccerScoresApi::SoccerScoresApiFunction.GetMatchesFunction::Execute
+      Handler: SoccerScoresApi::SoccerScoresApi.Functions.GetMatchesFunction::Execute
       Runtime: dotnetcore3.1
       CodeUri: s3://anchoragewonder-deploys/839ab4ed4d1d5cadd22370c65caec258
       MemorySize: 2048
