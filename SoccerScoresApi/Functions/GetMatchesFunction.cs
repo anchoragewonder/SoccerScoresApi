@@ -29,7 +29,7 @@ namespace SoccerScoresApi.Functions
 
             if (apigProxyEvent.PathParameters == null)
             {
-                List<MatchModel> example = await GetScores("Manchester United");
+                List<MatchModel> example = await GetScores("ManchesterUnited");
                 return new APIGatewayProxyResponse
                 {
                     Body = $"{EXAMPLE_TEXT}\n{JsonConvert.SerializeObject(example, Formatting.Indented)}",
