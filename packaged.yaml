@@ -1,0 +1,79 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: SoccerScoresApi
+Parameters:
+  Stage:
+    Description: The environment this application is deployed to (should be dev, staging
+      or prod)
+    Default: prod
+    Type: String
+Globals:
+  Api:
+    Cors:
+      AllowMethods: '''*'''
+      AllowHeaders: '''*'''
+      AllowOrigin: '''*'''
+Resources:
+  ScoreUpdate:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: SoccerScoresApi::SoccerScoresApi.Functions.UpsertMatchesFunction::Execute
+      Runtime: dotnetcore2.1
+      CodeUri: s3://anchoragewonder-deploys/839ab4ed4d1d5cadd22370c65caec258
+      MemorySize: 2048
+      Timeout: 30
+      Role: null
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      Events:
+        PostResource:
+          Type: Api
+          Properties:
+            Path: /update
+            Method: POST
+  EmptyGet:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: SoccerScoresApi::SoccerScoresApi.Functions.GetMatchesFunction::Execute
+      Runtime: dotnetcore2.1
+      CodeUri: s3://anchoragewonder-deploys/839ab4ed4d1d5cadd22370c65caec258
+      MemorySize: 2048
+      Timeout: 30
+      Role: null
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      Events:
+        PostResource:
+          Type: Api
+          Properties:
+            Path: /teams/
+            Method: GET
+  MatchesGet:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: SoccerScoresApi::SoccerScoresApiFunction.GetMatchesFunction::Execute
+      Runtime: dotnetcore2.1
+      CodeUri: s3://anchoragewonder-deploys/839ab4ed4d1d5cadd22370c65caec258
+      MemorySize: 2048
+      Timeout: 30
+      Role: null
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      Events:
+        PostResource:
+          Type: Api
+          Properties:
+            Path: /teams/{name}
+            Method: GET
+Outputs:
+  ApiURL:
+    Description: API endpoint URL
+    Value:
+      Fn::Join:
+      - ''
+      - - https://
+        - Ref: ServerlessRestApi
+        - .execute-api.
+        - Ref: AWS::Region
+        - .amazonaws.com/
+        - Ref: Stage

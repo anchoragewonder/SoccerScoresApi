@@ -22,7 +22,6 @@
     },
 
     "Resources" : {
-
         "ScoreUpdate" : {
             "Type" : "AWS::Serverless::Function",
             "Properties": {
@@ -85,9 +84,8 @@
                     }
                 }
             }
-        },
-
-    }
+        }
+    },
 
     "Outputs" : {
         "ApiURL" : {
