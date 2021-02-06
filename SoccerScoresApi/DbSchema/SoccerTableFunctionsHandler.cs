@@ -98,11 +98,11 @@ namespace SoccerScoresApi.DbSchema
 
             int? homeScore = null;
             int? awayScore = null;
-            if(home_obj != null)
+            if(home_obj != null && !string.IsNullOrEmpty(home_obj.ToString()))
             {
                 homeScore = Int32.Parse(home_obj.ToString());
             }
-            if(away_obj != null)
+            if(away_obj != null && !string.IsNullOrEmpty(away_obj.ToString()))
             {
                 awayScore = Int32.Parse(away_obj.ToString());
             }

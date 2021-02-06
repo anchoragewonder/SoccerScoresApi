@@ -24,6 +24,7 @@ namespace SoccerScoresApi.MatchModels
         [JsonProperty(PropertyName = "awayScore", Order = 5)]
         public int? awayScore { get; set; }
 
+        [JsonIgnore]
         public bool isValid
         {
             get
