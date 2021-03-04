@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +24,16 @@ namespace SoccerScoresApi.DbSchema
                 bool exists = await TryGetMatch(s);
                 bool success = (!exists) ? await TryInsertMatch(s) : await TryUpdateMatch(s);
                 if (!success) { return false; }
+            }
+            return true;
+        }
+
+        public static async Task<bool> TryUpsertFixtures(UpdateMatchesRequest request)
+        {
+            foreach (MatchModel s in request.Matches)
+            {
+                bool exists = await TryGetMatch(s);
+                if (!exists) { await TryInsertMatch(s); }
             }
             return true;
         }

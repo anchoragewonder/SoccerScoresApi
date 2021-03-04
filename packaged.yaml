@@ -19,7 +19,7 @@ Resources:
     Properties:
       Handler: SoccerScoresApi::SoccerScoresApi.Functions.UpsertMatchesFunction::Execute
       Runtime: dotnetcore3.1
-      CodeUri: s3://anchoragewonder-deploys/9815c5bc62f3a86347ff70bde0a12f94
+      CodeUri: s3://anchoragewonder-deploys/9df8eb5f5209a916dc82e7af23e59ba0
       MemorySize: 2048
       Timeout: 30
       Role: null
@@ -31,12 +31,29 @@ Resources:
           Properties:
             Path: /update/
             Method: POST
+  FixtureUpdate:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: SoccerScoresApi::SoccerScoresApi.Functions.UpsertFixturesFunction::Execute
+      Runtime: dotnetcore3.1
+      CodeUri: s3://anchoragewonder-deploys/9df8eb5f5209a916dc82e7af23e59ba0
+      MemorySize: 2048
+      Timeout: 30
+      Role: null
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      Events:
+        PostResource:
+          Type: Api
+          Properties:
+            Path: /update/fixtures/
+            Method: POST
   EmptyGet:
     Type: AWS::Serverless::Function
     Properties:
       Handler: SoccerScoresApi::SoccerScoresApi.Functions.GetMatchesFunction::Execute
       Runtime: dotnetcore3.1
-      CodeUri: s3://anchoragewonder-deploys/9815c5bc62f3a86347ff70bde0a12f94
+      CodeUri: s3://anchoragewonder-deploys/9df8eb5f5209a916dc82e7af23e59ba0
       MemorySize: 2048
       Timeout: 30
       Role: null
@@ -53,7 +70,7 @@ Resources:
     Properties:
       Handler: SoccerScoresApi::SoccerScoresApi.Functions.GetMatchesFunction::Execute
       Runtime: dotnetcore3.1
-      CodeUri: s3://anchoragewonder-deploys/9815c5bc62f3a86347ff70bde0a12f94
+      CodeUri: s3://anchoragewonder-deploys/9df8eb5f5209a916dc82e7af23e59ba0
       MemorySize: 2048
       Timeout: 30
       Role: null

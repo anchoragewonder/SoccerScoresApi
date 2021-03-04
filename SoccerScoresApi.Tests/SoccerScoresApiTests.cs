@@ -42,8 +42,8 @@ namespace SoccerScoresApi.Tests
             UpsertMatchesFunction func = new UpsertMatchesFunction();
             APIGatewayProxyRequest request = new APIGatewayProxyRequest();
 
-            MatchModels.MatchModel model = new MatchModels.MatchModel("date", "home", "away", 1, 1);
-            List<MatchModels.MatchModel> list = new List<MatchModels.MatchModel>() { model };
+            MatchModel model = new MatchModel("date", "home", "away", 1, 1);
+            List<MatchModel> list = new List<MatchModel>() { model };
             var body = new UpdateMatchesRequest(list);
             request.Body = JsonConvert.SerializeObject(body);
 
