@@ -28,7 +28,7 @@ namespace SoccerScoresApi.DbSchema
             return true;
         }
 
-        public static async Task<bool> TryUpsertFixtures(UpdateMatchesRequest request)
+        public static async Task<bool> TryInsertFixtures(UpdateMatchesRequest request)
         {
             foreach (MatchModel s in request.Matches)
             {

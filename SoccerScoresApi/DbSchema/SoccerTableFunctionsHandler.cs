@@ -58,7 +58,7 @@ namespace SoccerScoresApi.DbSchema
             }
             try
             {
-                string commandText = $"DELETE FROM {Table} WHERE (home_score = @home_score AND away_score = @away_score);";
+                string commandText = $"DELETE FROM {Table} WHERE home_score IS NULL AND away_score IS NULL;";
                 MySqlCommand cmd = new MySqlCommand(commandText, connection.Connection);
                 cmd.Parameters.AddWithValue("@home_score", null);
                 cmd.Parameters.AddWithValue("@away_score", null);

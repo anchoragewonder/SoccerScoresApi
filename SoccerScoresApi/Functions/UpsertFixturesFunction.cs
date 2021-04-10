@@ -70,9 +70,8 @@ namespace SoccerScoresApi.Functions
         }
         public async Task<bool> GetResponse(UpdateMatchesRequest request)
         {
-            bool isDeleted = await SoccerTableFunctionsHandler.DeleteEmptyScores();
-            bool isInserted = await MatchModelCRUDInterface.TryUpsertFixtures(request);
-            return isDeleted && isInserted;
+            bool isInserted = await MatchModelCRUDInterface.TryInsertFixtures(request);
+            return isInserted;
         }
     }
 }
