@@ -11,7 +11,7 @@ namespace SoccerScoresApi.Extension
         protected static string Password = "Blackdog2020$";
         protected static string Username = "Golohas";
         protected static int Port = 3306;
-        protected static string Endpoint = "rds-mysql-lol.chzcbnejugbt.us-east-1.rds.amazonaws.com";
+        protected static string Endpoint = "soccerfixtures.chzcbnejugbt.us-east-1.rds.amazonaws.com";
         protected static string Database = "soccer_fixtures";
 
         public MySqlConnection Connection;
